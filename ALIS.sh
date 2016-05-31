@@ -38,10 +38,9 @@ arch-chroot /mnt /bin/bash
 echo -n "Please enter hostname: "
 read hostname
 echo $hostname > /etc/hostname
-rm /etc/hosts
-touch /etc/hosts
-sed '$s/$/ 127.0.0.1       $hostname    $hostname/' /etc/hosts
-sed '$s/$/ ::1       $hostname    $hostname/' /etc/hosts
+rm -f /etc/hosts
+echo "127.0.0.1       $hostname    $hostname" >> /etc/hosts
+echo "::1       $hostname    $hostname" >> /etc/hosts
 
 echo -n "Enter new password for root: "
 passwd
@@ -51,7 +50,7 @@ read username
 useradd -m -G wheel -s /bin/bash $username
 echo -n "Enter new password for $username"
 passwd $username
-sed '$s/$/ $username ALL=(ALL) ALL/' /etc/sudoers
+echo "$username ALL=(ALL) ALL" >> /etc/sudoers
 
 echo "Installing network utils and xdg-user-dirs ..."
 sleep 3
@@ -64,11 +63,13 @@ read yaourt
 
 if [ $yaourt = "n" ]; then
 else
-sed '$s/$/ [archlinuxfr]/' /etc/pacman.conf
-sed '$s/$/ SigLevel = Never/' /etc/pacman.conf
-sed '$s/$/ Server = http://repo.archlinux.fr/$arch/' /etc/pacman.conf
+
+echo "[archlinuxfr]" >> /etc/pacman.conf
+echo "SigLevel = Never" >> /etc/pacman.conf
+echo "Server = http://repo.archlinux.fr/$arch" >> /etc/pacman.conf
 
 pacman -Sy yaourt
+
 fi
 
 mkinitcpio -p linux
