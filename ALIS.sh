@@ -15,7 +15,7 @@ wifi-menu
 fi
 
 echo "Next please create partitions, sda1 for /mnt and sda2 for swap"
-sleep 3
+read -p "$*"
 cfdisk
 echo " "
 fdisk -l
@@ -52,8 +52,7 @@ echo -n "Enter new password for $username"
 passwd $username
 echo "$username ALL=(ALL) ALL" >> /etc/sudoers
 
-echo "Installing network utils and xdg-user-dirs ..."
-sleep 3
+echo "Installing network utils and xdg-user-dirs..."
 pacman -Sy wpa_supplicant dialog xdg-user-dirs
 xdg-user-dirs-update
 
@@ -69,12 +68,12 @@ echo "SigLevel = Never" >> /etc/pacman.conf
 echo "Server = http://repo.archlinux.fr/$arch" >> /etc/pacman.conf
 
 pacman -Sy yaourt
-
 fi
 
+echo "Running mkinitcpio..."
 mkinitcpio -p linux
+
 echo "Installing Grub..."
-sleep 3
 pacman -Sy grub
 grub-install --target=i386-pc --recheck --force /dev/sda
 grub-mkconfig -o /boot/grub/grub.cfg
@@ -82,8 +81,9 @@ echo " "
 echo "INSTALLATION DONE !"
 echo "Thanks for using my script..."
 echo "https://github.com/jozefchovanec/"
-echo "Rebooting in 5 secounds..."
-sleep 5
+echo "Press enter to reboot"
+read -p "$*"
+
 exit
 reboot
 
