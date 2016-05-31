@@ -38,7 +38,8 @@ arch-chroot /mnt /bin/bash
 echo -n "Please enter hostname: "
 read hostname
 echo $hostname > /etc/hostname
-echo -n "Please write your hostname to /etc/hosts too"
+echo "Please write your hostname to /etc/hosts too"
+sleep 3
 nano /etc/hosts
 echo -n "Enter new password for root: "
 passwd
@@ -48,7 +49,8 @@ read username
 useradd -m -G wheel -s /bin/bash $username
 echo -n "Enter new password for $username"
 passwd $username
-echo -n "Please add your new user $username to /etc/sudoers"
+echo "Please add your new user $username to /etc/sudoers"
+sleep 3
 nano /etc/sudoers
 
 echo "Installing network utils and xdg-user-dirs ..."
