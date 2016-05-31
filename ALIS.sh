@@ -38,6 +38,8 @@ arch-chroot /mnt /bin/bash
 echo -n "Please enter hostname: "
 read hostname
 echo $hostname > /etc/hostname
+rm /etc/hosts
+touch /etc/hosts
 sed '$s/$/ 127.0.0.1       $hostname    $hostname/' /etc/hosts
 sed '$s/$/ ::1       $hostname    $hostname/' /etc/hosts
 
