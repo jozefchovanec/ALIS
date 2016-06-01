@@ -61,6 +61,7 @@ echo -n "[Y/n]"
 read yaourt
 
 if [ $yaourt = "n" ]; then
+break
 else
 
 echo "[archlinuxfr]" >> /etc/pacman.conf
