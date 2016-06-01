@@ -3,18 +3,8 @@
 
 echo "[ArchLinux Lightweight Installation Script]"
 echo " "
-echo "Your network connection is ?"
-echo "Enter 1 for Wireless"
-echo "Enter 2 for Wired"
-read network
 
-if [ $network = "2" ]; then
-dhcpcd
-else
-wifi-menu
-fi
-
-echo "Next please create partitions, sda1 for /mnt and sda2 for swap"
+echo "Please create partitions, sda1 for /mnt and sda2 for swap"
 read -p "$*"
 cfdisk
 echo " "
@@ -66,10 +56,28 @@ else
 
 echo "[archlinuxfr]" >> /etc/pacman.conf
 echo "SigLevel = Never" >> /etc/pacman.conf
-echo "Server = http://repo.archlinux.fr/$arch" >> /etc/pacman.conf
+echo "Server = http://repo.archlinux.fr/$arch" >> /etc/pacman.
 
+pacman -Scc
 pacman -Sy yaourt
 fi
+
+echo "Add [multilib] repository ?"
+echo -n "[Y/n]"
+read multilib
+
+if [ $multilib = "n" ]; then
+break
+else
+
+echo "[multilib]" >> /etc/pacman.conf
+echo "Include = /etc/pacman.d/mirrorlist" >> /etc/pacman.conf
+
+pacman -Scc
+fi
+
+
+
 
 echo "Running mkinitcpio..."
 mkinitcpio -p linux
