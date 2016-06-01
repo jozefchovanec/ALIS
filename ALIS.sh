@@ -77,9 +77,6 @@ echo "Include = /etc/pacman.d/mirrorlist" >> /etc/pacman.conf
 pacman -Scc
 fi
 
-
-
-
 echo "Running mkinitcpio..."
 mkinitcpio -p linux
 
