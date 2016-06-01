@@ -57,7 +57,7 @@ pacman -Sy wpa_supplicant dialog xdg-user-dirs
 xdg-user-dirs-update
 
 echo "Install Yaourt from archlinux.fr repository ?"
-echo -n "[Y/n]
+echo -n "[Y/n]"
 read yaourt
 
 if [ $yaourt = "n" ]; then
