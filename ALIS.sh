@@ -23,6 +23,7 @@ swapon /dev/sda2
 mount /dev/sda1 /mnt
 pacstrap -i /mnt base base-devel
 genfstab -U -p /mnt >> /mnt/etc/fstab
+
 arch-chroot /mnt /bin/bash
 
 echo -n "Please enter hostname: "
@@ -38,16 +39,16 @@ passwd
 echo -n "Enter name of new user: "
 read username
 useradd -m -G wheel -s /bin/bash $username
-echo -n "Enter new password for $username"
+echo -n "Enter new password for $username "
 passwd $username
 echo "$username ALL=(ALL) ALL" >> /etc/sudoers
 
-echo "Installing network utils and xdg-user-dirs..."
-pacman -Sy wpa_supplicant dialog xdg-user-dirs
+echo "Installing recommended utils..."
+pacman -Sy wpa_supplicant dialog xdg-user-dirs alsa-utils ntfs-3g dosfstools
 xdg-user-dirs-update
 
 echo "Install Yaourt from archlinux.fr repository ?"
-echo -n "[Y/n]"
+echo -n "[Y/n]> "
 read yaourt
 
 if [ $yaourt = "n" ]; then
@@ -56,14 +57,14 @@ else
 
 echo "[archlinuxfr]" >> /etc/pacman.conf
 echo "SigLevel = Never" >> /etc/pacman.conf
-echo "Server = http://repo.archlinux.fr/$arch" >> /etc/pacman.
+echo "Server = http://repo.archlinux.fr/$arch" >> /etc/pacman.conf
 
 pacman -Scc
 pacman -Sy yaourt
 fi
 
 echo "Add [multilib] repository ?"
-echo -n "[Y/n]"
+echo -n "[Y/n]> "
 read multilib
 
 if [ $multilib = "n" ]; then
