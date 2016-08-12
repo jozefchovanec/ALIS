@@ -24,6 +24,8 @@ mount /dev/sda1 /mnt
 pacstrap -i /mnt base base-devel
 genfstab -U -p /mnt >> /mnt/etc/fstab
 
+echo
+
 echo -n "Please enter hostname: "
 read hostname
 arch-chroot /mnt sh -c($'echo $hostname > /etc/hostname') & 
@@ -31,8 +33,12 @@ arch-chroot /mnt sh -c($'rm -f /etc/hosts') &
 arch-chroot /mnt sh -c($'echo "127.0.0.1       $hostname    $hostname" >> /etc/hosts') &
 arch-chroot /mnt sh -c($'echo "::1       $hostname    $hostname" >> /etc/hosts') & 
 
+echo
+
 echo -n "Enter new password for root: "
 arch-chroot /mnt sh -c($'passwd') & 
+
+echo
 
 echo -n "Enter name of new user: "
 read username
@@ -41,9 +47,13 @@ echo -n "Enter new password for $username "
 arch-chroot /mnt sh -c($'passwd $username') &
 arch-chroot /mnt sh -c($'echo "$username ALL=(ALL) ALL" >> /etc/sudoers') & 
 
+echo
+
 echo "Installing recommended utils..."
 arch-chroot /mnt sh -c($'pacman -Sy wpa_supplicant dialog xdg-user-dirs alsa-utils ntfs-3g dosfstools
 xdg-user-dirs-update') & 
+
+echo
 
 echo "Install Yaourt from archlinux.fr repository ?"
 echo -n "[Y/n]> "
@@ -62,6 +72,8 @@ arch-chroot /mnt sh -c($'pacman -Scc') &
 arch-chroot /mnt sh -c($'pacman -Sy yaourt') & 
 fi
 
+echo
+
 echo "Add [multilib] repository ?"
 echo -n "[Y/n]> "
 read multilib
@@ -77,8 +89,12 @@ arch-chroot /mnt sh -c($'pacman -Syy') &
 arch-chroot /mnt sh -c($'pacman -Scc') &
 fi
 
+echo
+
 echo "Running mkinitcpio..."
 arch-chroot /mnt sh -c($'mkinitcpio -p linux') &
+
+echo
 
 echo "Installing Grub..."
 arch-chroot /mnt sh -c($'pacman -Sy grub') &
