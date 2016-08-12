@@ -50,8 +50,8 @@ arch-chroot /mnt sh -c($'echo "$username ALL=(ALL) ALL" >> /etc/sudoers') &
 echo
 
 echo "Installing recommended utils..."
-arch-chroot /mnt sh -c($'pacman -Sy wpa_supplicant dialog xdg-user-dirs alsa-utils ntfs-3g dosfstools
-xdg-user-dirs-update') & 
+arch-chroot /mnt sh -c($'pacman -Sy wpa_supplicant dialog xdg-user-dirs alsa-utils ntfs-3g dosfstools') & 
+arch-chroot /mnt sh -c($'xdg-user-dirs-update') &
 
 echo
 
