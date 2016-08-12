@@ -24,28 +24,26 @@ mount /dev/sda1 /mnt
 pacstrap -i /mnt base base-devel
 genfstab -U -p /mnt >> /mnt/etc/fstab
 
-arch-chroot /mnt /bin/bash
-
 echo -n "Please enter hostname: "
 read hostname
-echo $hostname > /etc/hostname
-rm -f /etc/hosts
-echo "127.0.0.1       $hostname    $hostname" >> /etc/hosts
-echo "::1       $hostname    $hostname" >> /etc/hosts
+arch-chroot /mnt sh -c($'echo $hostname > /etc/hostname') & 
+arch-chroot /mnt sh -c($'rm -f /etc/hosts') & 
+arch-chroot /mnt sh -c($'echo "127.0.0.1       $hostname    $hostname" >> /etc/hosts') &
+arch-chroot /mnt sh -c($'echo "::1       $hostname    $hostname" >> /etc/hosts') & 
 
 echo -n "Enter new password for root: "
-passwd
+arch-chroot /mnt sh -c($'passwd') & 
 
 echo -n "Enter name of new user: "
 read username
-useradd -m -G wheel -s /bin/bash $username
+arch-chroot /mnt sh -c($'useradd -m -G wheel -s /bin/bash $username') & 
 echo -n "Enter new password for $username "
-passwd $username
-echo "$username ALL=(ALL) ALL" >> /etc/sudoers
+arch-chroot /mnt sh -c($'passwd $username') &
+arch-chroot /mnt sh -c($'echo "$username ALL=(ALL) ALL" >> /etc/sudoers') & 
 
 echo "Installing recommended utils..."
-pacman -Sy wpa_supplicant dialog xdg-user-dirs alsa-utils ntfs-3g dosfstools
-xdg-user-dirs-update
+arch-chroot /mnt sh -c($'pacman -Sy wpa_supplicant dialog xdg-user-dirs alsa-utils ntfs-3g dosfstools
+xdg-user-dirs-update') & 
 
 echo "Install Yaourt from archlinux.fr repository ?"
 echo -n "[Y/n]> "
@@ -55,13 +53,13 @@ if [ $yaourt = "n" ]; then
 break
 else
 
-echo "[archlinuxfr]" >> /etc/pacman.conf
-echo "SigLevel = Never" >> /etc/pacman.conf
-echo "Server = http://repo.archlinux.fr/$arch" >> /etc/pacman.conf
+arch-chroot /mnt sh -c($'echo "[archlinuxfr]" >> /etc/pacman.conf') &
+arch-chroot /mnt sh -c($'echo "SigLevel = Never" >> /etc/pacman.conf') &
+arch-chroot /mnt sh -c($'echo "Server = http://repo.archlinux.fr/$arch" >> /etc/pacman.conf') &
 
-pacman -Syy
-pacman -Scc
-pacman -Sy yaourt
+arch-chroot /mnt sh -c($'pacman -Syy') & 
+arch-chroot /mnt sh -c($'pacman -Scc') &
+arch-chroot /mnt sh -c($'pacman -Sy yaourt') & 
 fi
 
 echo "Add [multilib] repository ?"
@@ -72,20 +70,20 @@ if [ $multilib = "n" ]; then
 break
 else
 
-echo "[multilib]" >> /etc/pacman.conf
-echo "Include = /etc/pacman.d/mirrorlist" >> /etc/pacman.conf
+arch-chroot /mnt sh -c($'echo "[multilib]" >> /etc/pacman.conf') & 
+arch-chroot /mnt sh -c($'echo "Include = /etc/pacman.d/mirrorlist" >> /etc/pacman.conf') &
 
-pacman -Syy
-pacman -Scc
+arch-chroot /mnt sh -c($'pacman -Syy') & 
+arch-chroot /mnt sh -c($'pacman -Scc') &
 fi
 
 echo "Running mkinitcpio..."
-mkinitcpio -p linux
+arch-chroot /mnt sh -c($'mkinitcpio -p linux') &
 
 echo "Installing Grub..."
-pacman -Sy grub
-grub-install --target=i386-pc --recheck --force /dev/sda
-grub-mkconfig -o /boot/grub/grub.cfg
+arch-chroot /mnt sh -c($'pacman -Sy grub') &
+arch-chroot /mnt sh -c($'grub-install --target=i386-pc --recheck --force /dev/sda') &
+arch-chroot /mnt sh -c($'grub-mkconfig -o /boot/grub/grub.cfg') &
 echo
 echo "INSTALLATION DONE !"
 echo "Thanks for using my script..."
@@ -93,7 +91,6 @@ echo "https://github.com/jozefchovanec/"
 echo "Press enter to reboot"
 read -p "$*"
 
-exit
 reboot
 
 else
