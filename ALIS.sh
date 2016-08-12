@@ -2,14 +2,14 @@
 #ArchLinux Lightweight Installation Script
 
 echo "[ArchLinux Lightweight Installation Script]"
-echo " "
+echo
 
 echo "Please create partitions, sda1 for /mnt and sda2 for swap"
 read -p "$*"
 cfdisk
-echo " "
+echo
 fdisk -l
-echo " "
+echo
 echo "Are you ready for the installation ?"
 echo -n "[y/N]> "
 read ready
@@ -86,7 +86,7 @@ echo "Installing Grub..."
 pacman -Sy grub
 grub-install --target=i386-pc --recheck --force /dev/sda
 grub-mkconfig -o /boot/grub/grub.cfg
-echo " "
+echo
 echo "INSTALLATION DONE !"
 echo "Thanks for using my script..."
 echo "https://github.com/jozefchovanec/"
