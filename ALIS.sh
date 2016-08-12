@@ -42,15 +42,15 @@ echo
 
 echo -n "Enter name of new user: "
 read username
-arch-chroot /mnt sh -c($'useradd -m -G wheel -s /bin/bash $username') & 
+arch-chroot /mnt sh -c($'useradd -m -G wheel -s /bin/bash $username') &
 echo -n "Enter new password for $username "
 arch-chroot /mnt sh -c($'passwd $username') &
-arch-chroot /mnt sh -c($'echo "$username ALL=(ALL) ALL" >> /etc/sudoers') & 
+arch-chroot /mnt sh -c($'echo "$username ALL=(ALL) ALL" >> /etc/sudoers') &
 
 echo
 
 echo "Installing recommended utils..."
-arch-chroot /mnt sh -c($'pacman -Sy wpa_supplicant dialog xdg-user-dirs alsa-utils ntfs-3g dosfstools') & 
+arch-chroot /mnt sh -c($'pacman -Sy wpa_supplicant dialog xdg-user-dirs alsa-utils ntfs-3g dosfstools exfat-utils mtools scrot htop') &
 arch-chroot /mnt sh -c($'xdg-user-dirs-update') &
 
 echo
@@ -67,9 +67,9 @@ arch-chroot /mnt sh -c($'echo "[archlinuxfr]" >> /etc/pacman.conf') &
 arch-chroot /mnt sh -c($'echo "SigLevel = Never" >> /etc/pacman.conf') &
 arch-chroot /mnt sh -c($'echo "Server = http://repo.archlinux.fr/$arch" >> /etc/pacman.conf') &
 
-arch-chroot /mnt sh -c($'pacman -Syy') & 
+arch-chroot /mnt sh -c($'pacman -Syy') &
 arch-chroot /mnt sh -c($'pacman -Scc') &
-arch-chroot /mnt sh -c($'pacman -Sy yaourt') & 
+arch-chroot /mnt sh -c($'pacman -Sy yaourt') &
 fi
 
 echo
@@ -82,10 +82,10 @@ if [ $multilib = "n" ]; then
 break
 else
 
-arch-chroot /mnt sh -c($'echo "[multilib]" >> /etc/pacman.conf') & 
+arch-chroot /mnt sh -c($'echo "[multilib]" >> /etc/pacman.conf') &
 arch-chroot /mnt sh -c($'echo "Include = /etc/pacman.d/mirrorlist" >> /etc/pacman.conf') &
 
-arch-chroot /mnt sh -c($'pacman -Syy') & 
+arch-chroot /mnt sh -c($'pacman -Syy') &
 arch-chroot /mnt sh -c($'pacman -Scc') &
 fi
 
